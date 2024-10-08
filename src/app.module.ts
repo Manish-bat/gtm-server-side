@@ -11,7 +11,7 @@ import { UserModule } from './user/user.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: './.env',
+      envFilePath: '.env',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -23,13 +23,8 @@ import { UserModule } from './user/user.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false,
-        ssl:
-          configService.get('DB_SSL') === 'true'
-            ? {
-                rejectUnauthorized: false,
-              }
-            : false,
+        synchronize: true, // Be cautious with this in production
+        ssl: configService.get('DB_SSL') === 'true' ? { rejectUnauthorized: false } : false,
       }),
       inject: [ConfigService],
     }),
